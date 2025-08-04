@@ -1,6 +1,9 @@
 import com.v.Calculator;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,30 +11,76 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Test Math Operation in calculator class")
 public class DemoTest {
 
+    Calculator c;
 
+    @BeforeAll
+    public static void setup(){
+        System.out.println("Executing Before All method");
+    }
+
+    @AfterAll
+    public static void cleanup(){
+        System.out.println("Executing After All method");
+    }
+
+    @BeforeEach
+    public void beforeEach(){
+        System.out.println("Executing before each method");
+        c= new Calculator();
+    }
+
+    @AfterEach
+    public void afterEach(){
+        System.out.println("Executing after each method");
+    }
+
+
+
+
+    //method naming convention
+    //test<System under test>_<condition or state change>_<expected result>
     @Test
     @DisplayName("Test Division by 0")
     public void testIntegerDivision_WhenDividedBy0_shouldThrowArithmeticException(){
-        int divident=4;
+
+        //AAA
+
+        //Arrange
+        int dividend=4;
         int divisor=0;
-        Calculator c=new Calculator();
+        String expectedException="/ by zero";
 
-        assertThrows(ArithmeticException.class,()->{
-            c.integerDivision(divident,divisor);
-        });
 
+        //Act and assert
+        ArithmeticException arithmeticException = assertThrows(ArithmeticException.class, () -> {
+            //act
+
+            //act
+            c.integerDivision(dividend, divisor);
+        }, "Division by 0 showld have thrown Arithmetic exception");
+
+        //assert
+        assertEquals(expectedException,arithmeticException.getMessage(),"Unexpected exception occur");
     }
 
     @Test
+    @Disabled("Task needed ")
     @DisplayName("Division 4/2 = 2")
-    public void testIntegerDivision(){
+    public void test_IntegerDivision_WhenFourDividedByTwo_ShouldReturnTwo(){
 
-        System.out.println("Hello");
-        Calculator c=new Calculator();
+        //Arrange  another name given
+        int dividend=4;
+        int divisor=2;
+        int expectedResult=2;
 
-
-
+        //act  //when
         int res = c.integerDivision(4, 2);
+
+        assertEquals(expectedResult,res,()->dividend+" "+divisor+" did not produce expected "+res);
+
+
+        //assert  //then
+
 //        assertEquals(2, res, "Values should be equal");
 //        assertNotEquals(4,res,"Not equal to 2");
 //        assertNotNull(c);
@@ -44,18 +93,43 @@ public class DemoTest {
 
     }
 
-    @Test
-    @DisplayName("Subtraction 10-5 = 5")
-    public void integerSubtraction(){
-        Calculator c= new Calculator();
-        int minusend=10;
-        int subtractend=5;
-        int expectedResult=5;
-        int result = c.integerSubtraction(10, 4);
 
-           assertEquals(expectedResult,result,()->minusend+" "+subtractend+" did not produce expected "+result);
+    @ParameterizedTest
+//    @ValueSource(strings = {"Bond","Wayne",})
+    @NullSource
+    void valueSoruceDemonstration(String firstName){
+
+        System.out.println(firstName);
+        assertNotNull(firstName);
+    }
+
+    @ParameterizedTest
+//    @MethodSource()
+//    @CsvFileSource(resources = "/integerSubtraction.csv")
+//    @CsvSource({
+//           "1,2,-1",
+//            "15,5,10"
+//
+//    })
+    @DisplayName("Test Integer Subtraction [minuend,subtrahend,expectedResult")
+    public void integerSubtraction(int minuend,int subtrahend,int expectedResult){
+
+        int result = c.integerSubtraction(minuend, subtrahend);
+
+        System.out.println(minuend +" - "+subtrahend+" = "+expectedResult);
+
+           assertEquals(expectedResult,result,()->minuend+" "+subtrahend+" did not produce expected "+result);
 
 
+    }
+
+    static Stream<Arguments> integerSubtraction(){
+
+        return Stream.of(
+                Arguments.of(10,5,5),
+                Arguments.of(5,5,0),
+                Arguments.of(15,5,10)
+        );
     }
 
 }
