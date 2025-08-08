@@ -1,12 +1,17 @@
 package com.v.estore.service;
 
+import com.v.estore.data.UsersRepository;
+import com.v.estore.exception.UserServiceException;
 import com.v.estore.model.User;
 
 public class UserServiceImpl implements UserService {
 
-    public UserServiceImpl() {
+    UsersRepository usersRepository;
 
+    public UserServiceImpl(UsersRepository usersRepository) {
+        this.usersRepository=usersRepository;
     }
+
 
 
     @Override
@@ -26,8 +31,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(String username, String lastName, String password) {
-        if(username.co)
+
+        if((username==null || lastName==null)){
+            throw new IllegalArgumentException("Cannot be null");
+        }
         User newUser=new User(username,lastName,password);
+        boolean isUserCreated = usersRepository.saveUser(newUser);
+        if(!isUserCreated) throw new UserServiceException("Could Not CreateUser") ;
         return newUser;
     }
 

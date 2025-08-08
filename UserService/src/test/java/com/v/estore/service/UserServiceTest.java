@@ -1,5 +1,6 @@
 package com.v.estore.service;
 
+import com.v.estore.data.UsersRepository;
 import com.v.estore.model.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
