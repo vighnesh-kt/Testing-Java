@@ -7,9 +7,11 @@ import com.v.estore.model.User;
 public class UserServiceImpl implements UserService {
 
     UsersRepository usersRepository;
+    EmailVerificationService emailVerificationService;
 
-    public UserServiceImpl(UsersRepository usersRepository) {
+    public UserServiceImpl(UsersRepository usersRepository,EmailVerificationService emailVerificationService) {
         this.usersRepository=usersRepository;
+        this.emailVerificationService=emailVerificationService;
     }
 
 
@@ -36,8 +38,19 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Cannot be null");
         }
         User newUser=new User(username,lastName,password);
-        boolean isUserCreated = usersRepository.saveUser(newUser);
-        if(!isUserCreated) throw new UserServiceException("Could Not CreateUser") ;
+        boolean isUserCreated;
+        try {
+             isUserCreated = usersRepository.saveUser(newUser);
+        }catch(RuntimeException ex){
+            throw new UserServiceException(ex.getMessage());
+        }
+
+        if(!isUserCreated)  throw new UserServiceException("Could Not CreateUser") ;
+        try{
+            emailVerificationService.scheduleEmailConfirmation(newUser);
+        }catch (RuntimeException ex){
+          throw new UserServiceException(ex.getMessage());
+        }
         return newUser;
     }
 
