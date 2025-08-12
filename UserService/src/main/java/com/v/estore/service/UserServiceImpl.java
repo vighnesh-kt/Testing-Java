@@ -4,6 +4,7 @@ import com.v.estore.data.UsersRepository;
 import com.v.estore.exception.UserServiceException;
 import com.v.estore.model.User;
 
+
 public class UserServiceImpl implements UserService {
 
     UsersRepository usersRepository;
@@ -52,6 +53,10 @@ public class UserServiceImpl implements UserService {
           throw new UserServiceException(ex.getMessage());
         }
         return newUser;
+    }
+
+    public void demoMethod(){
+
     }
 
 }
