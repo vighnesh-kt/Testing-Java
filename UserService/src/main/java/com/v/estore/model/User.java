@@ -57,4 +57,10 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public static void main(String[] args) {
+        char c=95;
+
+        System.out.println(c);
+    }
 }
