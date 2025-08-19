@@ -17,13 +17,13 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
-        <module name="TestingRestController" />
+        <module name="TestingRest" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="TestingRestController" options="-parameters" />
+      <module name="TestingRest" options="-parameters" />
     </option>
   </component>
 </project>
