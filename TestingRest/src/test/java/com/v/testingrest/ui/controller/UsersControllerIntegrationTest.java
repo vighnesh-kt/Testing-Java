@@ -1,5 +1,6 @@
 package com.v.testingrest.ui.controller;
 
+import com.v.testingrest.security.SecurityConstants;
 import com.v.testingrest.ui.response.UserRest;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,14 +12,18 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UsersControllerIntegrationTest {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
+
+    private String authorizationToken;
 
     @Test
     @DisplayName("User can be created")
@@ -91,7 +96,7 @@ class UsersControllerIntegrationTest {
     @Test
     @DisplayName("login works")
     @Order(3)
-    void testUserLogin_validUserCredentialsProvided_returnsJWTinAuthHeader() throws JSONException {
+    void testUserLogin_whenValidUserCredentialsProvided_returnsJWTinAuthHeader() throws JSONException {
 
         // Arrange
 
@@ -113,20 +118,45 @@ class UsersControllerIntegrationTest {
                 request,
                 null); //as we are not receiving anything
 
-//        authorizationToken = response.getHeaders().
-//                getValuesAsList(SecurityConstants.HEADER_STRING).get(0);
+        authorizationToken = response.getHeaders().
+                getValuesAsList(SecurityConstants.HEADER_STRING).get(0);
 
         // Assert
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode(),
                 "HTTP Status code should be 200");
-//        Assertions.assertNotNull(authorizationToken,
-//                "Response should contain Authorization header with JWT");
+        Assertions.assertNotNull(authorizationToken,
+                "Response should contain Authorization header with JWT");
         Assertions.assertNotNull(response.getHeaders().
                         getValuesAsList("UserID").get(0),
                 "Response should contain UserID in a response header");
 
 
 
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("GET /users works")
+    void testGetUsers_whenValidJWTProvided_returnsUsers() {
+        // Arrange
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setBearerAuth(authorizationToken); //this will a token to header so that we can validate
+
+        HttpEntity requestEntity = new HttpEntity(headers);
+
+        // Act
+        ResponseEntity<List<UserRest>> response = testRestTemplate.exchange("/users",
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<List<UserRest>>() {
+                });
+
+        // Assert
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode(),
+                "HTTP Status code should be 200");
+        Assertions.assertTrue(response.getBody().size() == 1,
+                "There should be exactly 1 user in the list");
     }
 
 
