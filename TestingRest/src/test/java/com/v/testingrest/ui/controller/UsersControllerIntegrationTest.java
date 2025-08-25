@@ -107,8 +107,8 @@ class UsersControllerIntegrationTest {
 //                "    \"password\":\"12345678\"\n" +
 //                "}";
         JSONObject loginCredentials = new JSONObject();
-        loginCredentials.put("email","test@test.com");
-        loginCredentials.put("password","12345678");
+        loginCredentials.put("email","im@Batman");
+        loginCredentials.put("password","whysoserious");
 
         HttpEntity<String> request = new HttpEntity<>(loginCredentials.toString());
 
