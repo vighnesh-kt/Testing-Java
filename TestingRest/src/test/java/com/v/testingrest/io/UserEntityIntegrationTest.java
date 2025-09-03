@@ -1,5 +1,6 @@
 package com.v.testingrest.io;
 
+import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,9 +22,9 @@ public class UserEntityIntegrationTest {
     void setup() {
         userEntity = new UserEntity();
         userEntity.setUserId(UUID.randomUUID().toString());
-        userEntity.setFirstName("Sergey");
-        userEntity.setLastName("Kargopolov");
-        userEntity.setEmail("test@test.com");
+        userEntity.setFirstName("Bruce");
+        userEntity.setLastName("Wayne");
+        userEntity.setEmail("im@batman.com");
         userEntity.setEncryptedPassword("12345678");
     }
 
@@ -59,8 +60,39 @@ public class UserEntityIntegrationTest {
     void testUserEntity_whenFirstNameisTooLong_shouldThrowException(){
         //Arrange
 
-        //Act
 
+        //Act and Assert
+
+        Assertions.assertThrows(PersistenceException.class,
+                ()->{
+            testEntityManager.persistAndFlush(userEntity);
+                },"Was expecting a PersistenceException to be thrown."
+
+        );
+
+    }
+
+    @Test
+    void testUserEntity_whenExistingUserIdProvided_shouldThrowException(){
+        //Arrange
+        UserEntity newEntity = new UserEntity();
+        newEntity.setUserId("1");
+        newEntity.setFirstName("Bruce");
+        newEntity.setLastName("Wayne");
+        newEntity.setEmail("im@batman.com");
+        newEntity.setEncryptedPassword("12345678");
+
+        testEntityManager.persistAndFlush(newEntity);
+        userEntity.setUserId("1");
+
+        //Act and Assert
+
+        Assertions.assertThrows(PersistenceException.class,
+                ()->{
+                    testEntityManager.persistAndFlush(userEntity);
+                },"Was expecting a PersistenceException to be thrown."
+
+        );
     }
 
 }
