@@ -9,6 +9,7 @@ import com.v.testingrest.ui.response.UserRest;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,13 @@ public class UsersController {
         UserDto createdUser = usersService.createUser(userDto);
 
         return modelMapper.map(createdUser, UserRest.class);
+    }
+
+    @GetMapping("/{userId}")
+    public UserRest getUser(@PathVariable String userId) {
+        UserRest returnValue = new UserRest();
+        BeanUtils.copyProperties(usersService.getUser(userId), returnValue);
+        return returnValue;
     }
 
     @GetMapping
