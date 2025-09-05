@@ -7,8 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="UsersService" />
         <module name="UserService" />
         <module name="Calculator" />
+        <module name="users-service-restassured" />
       </profile>
       <profile name="Annotation profile for TestingRestController" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -23,12 +25,15 @@
     <bytecodeTargetLevel>
       <module name="Calculator" target="17" />
       <module name="TestingRest" target="17" />
+      <module name="users-service-restassured" target="19" />
       <module name="UserService" target="17" />
+      <module name="UsersService" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="TestingRest" options="-parameters" />
+      <module name="users-service-restassured" options="-parameters" />
     </option>
   </component>
 </project>

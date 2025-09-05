@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/Testing Java.iml" filepath="$PROJECT_DIR$/.idea/Testing Java.iml" />
       <module fileurl="file://$PROJECT_DIR$/TestingRest/TestingRest.iml" filepath="$PROJECT_DIR$/TestingRest/TestingRest.iml" />
       <module fileurl="file://$PROJECT_DIR$/UserService/UserService.iml" filepath="$PROJECT_DIR$/UserService/UserService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/users-service-restassured/users-service-restassured.iml" filepath="$PROJECT_DIR$/users-service-restassured/users-service-restassured.iml" />
     </modules>
   </component>
 </project>
